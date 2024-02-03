@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Line Plugin</title>
+	<link rel="stylesheet" href="ui.css">
+</head>
+
+<body>
+	<div class="container">
+		<h2>Line Options</h2>
+
+		<div class="input-group">
+			<label for="lineType">Select Line Type:</label>
+			<select id="lineType">
+				<option value="straight">Straight Line</option>
+				<option value="wavy">Wavy Line</option>
+				<!-- Add more options as needed -->
+			</select>
+		</div>
+
+		<div class="input-group">
+			<label for="pixelInput">Stroke Weight:</label>
+			<input type="number" id="pixelInput" placeholder="Enter stroke weight">
+		</div>
+
+		<div class="input-group">
+			<label for="lengthInput">Line Length:</label>
+			<input type="number" id="lengthInput" placeholder="Enter line length">
+		</div>
+
+		<div class="input-group">
+			<label for="angleInput">Rotation Angle:</label>
+			<input type="number" id="angleInput" placeholder="Enter rotation angle">
+		</div>
+
+		<button id="createLineButton">Create Line</button>
+	</div>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const createLineButton = document.getElementById('createLineButton');
+
+			createLineButton.addEventListener('click', function () {
+				const lineType = document.getElementById('lineType').value;
+				const pixelWidth = document.getElementById('pixelInput').value;
+				const lineLength = document.getElementById('lengthInput').value;
+				const rotationAngle = document.getElementById('angleInput').value;
+
+				// Send a message to the Figma plugin code
+				parent.postMessage({ pluginMessage: { type: 'createLine', lineType, pixelWidth, lineLength, rotationAngle } }, '*');
+			});
+		});
+	</script>
+</body>
+
+</html>

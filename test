@@ -1,0 +1,22 @@
+async function main() {
+
+
+	// Create VECTOR
+	var vector_183_6484 = figma.createVector()
+	figma.currentPage.appendChild(vector_183_6484)
+	vector_183_6484.resize(10187.5000000000, 907.0000000000)
+	vector_183_6484.name = "Line 48"
+	vector_183_6484.strokes = [{"type":"SOLID","visible":true,"opacity":1,"blendMode":"NORMAL","color":{"r":1,"g":1,"b":1},"boundVariables":{}}]
+	vector_183_6484.strokeWeight = 4
+	vector_183_6484.relativeTransform = [[1,0,13344],[0,1,14608]]
+	vector_183_6484.x = 13344
+	vector_183_6484.y = 14608
+	vector_183_6484.constrainProportions = true
+	vector_183_6484.vectorNetwork = {"regions":[],
+    "segments":[
+        {"start":0,"end":2,"tangentStart":{"x":0,"y":0},"tangentEnd":{"x":0,"y":0}},{"start":2,"end":3,"tangentStart":{"x":0,"y":0},"tangentEnd":{"x":0,"y":0}},{"start":3,"end":4,"tangentStart":{"x":0,"y":0},"tangentEnd":{"x":0,"y":0}},{"start":4,"end":5,"tangentStart":{"x":0,"y":0},"tangentEnd":{"x":0,"y":0}},{"start":5,"end":6,"tangentStart":{"x":0,"y":0},"tangentEnd":{"x":0,"y":0}},{"start":6,"end":7,"tangentStart":{"x":0,"y":0},"tangentEnd":{"x":0,"y":0}},{"start":8,"end":1,"tangentStart":{"x":0,"y":0},"tangentEnd":{"x":0,"y":0}},{"start":7,"end":9,"tangentStart":{"x":0,"y":0},"tangentEnd":{"x":0,"y":0}},{"start":9,"end":8,"tangentStart":{"x":0,"y":0},"tangentEnd":{"x":0,"y":0}}],"vertices":[{"x":0,"y":907,"strokeCap":"NONE","strokeJoin":"MITER","cornerRadius":0,"handleMirroring":"NONE"},{"x":10187.5,"y":0,"strokeCap":"NONE","strokeJoin":"MITER","cornerRadius":0,"handleMirroring":"NONE"},{"x":1241,"y":0,"strokeCap":"NONE","strokeJoin":"MITER","cornerRadius":0,"handleMirroring":"NONE"},{"x":2452.5,"y":907,"strokeCap":"NONE","strokeJoin":"MITER","cornerRadius":0,"handleMirroring":"NONE"},{"x":3827,"y":0,"strokeCap":"NONE","strokeJoin":"MITER","cornerRadius":0,"handleMirroring":"NONE"},{"x":5015,"y":907,"strokeCap":"NONE","strokeJoin":"MITER","cornerRadius":0,"handleMirroring":"NONE"},{"x":6180,"y":0,"strokeCap":"NONE","strokeJoin":"MITER","cornerRadius":0,"handleMirroring":"NONE"},{"x":7205.5,"y":907,"strokeCap":"NONE","strokeJoin":"MITER","cornerRadius":0,"handleMirroring":"NONE"},{"x":9302,"y":907,"strokeCap":"NONE","strokeJoin":"MITER","cornerRadius":0,"handleMirroring":"NONE"},{"x":8323.5,"y":0,"strokeCap":"NONE","strokeJoin":"MITER","cornerRadius":0,"handleMirroring":"NONE"}]}
+	vector_183_6484.vectorPaths = [{"windingRule":"NONE","data":"M 0 907 L 1241 0 L 2452.5 907 L 3827 0 L 5015 907 L 6180 0 L 7205.5 907 L 8323.5 0 L 9302 907 L 10187.5 0"}]
+	
+}
+
+main()

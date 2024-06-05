@@ -1,6 +1,6 @@
 {
-  "name": "baby",
-  "id": "1335615600882586456",
+  "name": "Wavy Lines",
+  "id": "1357290676103745205",
   "api": "1.0.0",
   "main": "code.js",
   "capabilities": [],
@@ -11,7 +11,7 @@
   "ui": "ui.html",
   "networkAccess": {
     "allowedDomains": [
-      "none"
+      "https://cdn-imgix.headout.com/"
     ]
   }
 }

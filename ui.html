@@ -2,58 +2,285 @@
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Line Plugin</title>
-	<link rel="stylesheet" href="ui.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Line Plugin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;600&family=Nunito+Sans:opsz,wght@6..12,200&family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body,
+        html {
+            font-family: "Manrope", sans-serif;
+            font-weight: 300;
+            color: #fff;
+            background-color: #2c2c2c;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .plugin-container {
+            margin: 16px 20px;
+        }
+
+        .header {
+            position: relative;
+            width: 100%;
+        }
+
+        .header h1 {
+            font-size: 23px;
+            font-weight: 600;
+            padding: 0;
+            margin: 0;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 10px 20px 10px;
+            height: 47px;
+        }
+
+        .header-image {
+            position: absolute;
+            height: 67px;
+            width: 100%;
+            object-fit: cover;
+            z-index: 0;
+            top: 0;
+            left: 0;
+        }
+
+        .input-groups {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .input-group {
+            padding-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 12px;
+            line-height: 100%;
+            font-weight: 600;
+        }
+
+        .mandatory {
+            color: red;
+        }
+
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 4px 12px;
+            border-radius: 6px;
+            border: 1px solid #4A4A4A;
+            background-color: #2c2c2c;
+            color: white;
+            font-family: "Manrope", sans-serif;
+            font-weight: 300;
+            font-size: 12px;
+            line-height: 22px;
+            letter-spacing: normal;
+            outline: none;
+        }
+
+        .subtext {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        button {
+            padding: 12px 20px;
+            width: 100%;
+            cursor: pointer;
+            border-radius: 6px;
+            border: 0px solid #343434;
+            color: #ffffff;
+            background-color: #343434;
+            font-family: "Manrope", sans-serif;
+            letter-spacing: 0.6;
+            font-size: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #42CF71;
+        }
+
+        button:focus {
+            background-color: #E6CCFF;
+        }
+
+        .line-type-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 20px;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .tabs button {
+            cursor: pointer;
+            width: 124px;
+            height: 40px;
+            background-color: #2c2c2c;
+            border: 1px solid #4A4A4A;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 12px;
+        }
+
+        .tabs button.selected {
+            border-color: #42CF71;
+            background-color: #282828;
+        }
+
+        .tabs button:hover {
+            box-shadow: none;
+            background-color: #282828;
+        }
+
+        .tabs button:focus {
+            border-color: #42CF71;
+            background-color: #282828;
+        }
+
+        .tabs img {
+            margin-left: 8px;
+        }
+    </style>
 </head>
 
 <body>
-	<div class="container">
-		<h2>Line Options</h2>
+    <img class="header-image" src="https://cdn-imgix.headout.com/media/images/4fa15c32f9a422b675adfe7462ff32a0-bannerwavy.png" alt="">
+    <div class="header">
+        <div class="header-content">
+            <h1></h1>
+        </div>
+    </div>
+    <div class="plugin-container">
 
-		<div class="input-group">
-			<label for="lineType">Select Line Type:</label>
-			<select id="lineType">
-				<option value="straight">Straight Line</option>
-				<option value="wavy">Wavy Line</option>
-				<!-- Add more options as needed -->
-			</select>
-		</div>
+        <div class="input-groups">
+            <div class="line-type-group">
+                <label>Line Type <span class="mandatory">*</span></label>
+                <div class="tabs">
+                    <div class="button-group">
+                        <button id="curved" class="selected">Curved<img src="https://cdn-imgix.headout.com/media/images/e90f8af709ae906902de8a9fccdcfc5d-curved.svg" alt=""></button>
+                        <button id="jagged">Jagged<img src="https://cdn-imgix.headout.com/media/images/b4b535b8f994b55d898e5df34a2cd59f-jagged.svg" alt=""></button>
+                    </div>
+                    <div class="button-group">
+                        <button id="ramp">Ramp<img src="https://cdn-imgix.headout.com/media/images/b4b535b8f994b55d898e5df34a2cd59f-jagged.svg" alt=""></button>
+                        <button id="square">Square<img src="https://cdn-imgix.headout.com/media/images/b4b535b8f994b55d898e5df34a2cd59f-jagged.svg" alt=""></button>
+                    </div>
+                </div>
+            </div>
 
-		<div class="input-group">
-			<label for="pixelInput">Stroke Weight:</label>
-			<input type="number" id="pixelInput" placeholder="Enter stroke weight">
-		</div>
+            <div class="input-group">
+                <label for="lengthInput">Line width <span class="mandatory">*</span></label>
+                <input type="number" id="lengthInput" placeholder="Min width: 100px">
+            </div>
 
-		<div class="input-group">
-			<label for="lengthInput">Line Length:</label>
-			<input type="number" id="lengthInput" placeholder="Enter line length">
-		</div>
+            <div class="input-group">
+                <label for="pixelInput">Stroke <span class="mandatory">*</span></label>
+                <input type="number" id="pixelInput" placeholder="Optimal: 2px">
+            </div>
 
-		<div class="input-group">
-			<label for="angleInput">Rotation Angle:</label>
-			<input type="number" id="angleInput" placeholder="Enter rotation angle">
-		</div>
+            <div class="input-group">
+                <label for="edgeFreq">Number of edges <span class="mandatory">*</span></label>
+                <input type="number" id="edgeFreq" placeholder="Optimal: 10">
+            </div>
 
-		<button id="createLineButton">Create Line</button>
-	</div>
+            <div class="input-group" id="cornerRadiusGroup">
+                <label for="cornerRadius">Corner radius <span class="mandatory">*</span></label>
+                <input type="number" id="cornerRadius" placeholder="Optimal: 10px">
+                <div class="subtext">For rounded edges</div>
+            </div>
 
-	<script>
-		document.addEventListener('DOMContentLoaded', function () {
-			const createLineButton = document.getElementById('createLineButton');
+            <div class="input-group">
+                <label for="angleInput">Rotation angle <span class="mandatory">*</span></label>
+                <input type="number" id="angleInput" placeholder="Optimal: 30 degrees">
+                <div class="subtext">Base interior angle in degrees</div>
+            </div>
+        </div>
 
-			createLineButton.addEventListener('click', function () {
-				const lineType = document.getElementById('lineType').value;
-				const pixelWidth = document.getElementById('pixelInput').value;
-				const lineLength = document.getElementById('lengthInput').value;
-				const rotationAngle = document.getElementById('angleInput').value;
+        <button id="createLineButton">Create Line</button>
+    </div>
 
-				// Send a message to the Figma plugin code
-				parent.postMessage({ pluginMessage: { type: 'createLine', lineType, pixelWidth, lineLength, rotationAngle } }, '*');
-			});
-		});
-	</script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const createLineButton = document.getElementById('createLineButton');
+            const curvedButton = document.getElementById('curved');
+            const jaggedButton = document.getElementById('jagged');
+            const rampButton = document.getElementById('ramp');
+            const cornerRadiusGroup = document.getElementById('cornerRadiusGroup');
+
+            function updateSelection(selectedButton) {
+                curvedButton.classList.remove('selected');
+                jaggedButton.classList.remove('selected');
+                rampButton.classList.remove('selected');
+                selectedButton.classList.add('selected');
+            }
+
+            curvedButton.addEventListener('click', function () {
+                updateSelection(curvedButton);
+                cornerRadiusGroup.style.display = 'block';
+                parent.postMessage({ pluginMessage: { type: 'resize', height: 650 } }, '*');
+            });
+
+            jaggedButton.addEventListener('click', function () {
+                updateSelection(jaggedButton);
+                cornerRadiusGroup.style.display = 'none';
+                parent.postMessage({ pluginMessage: { type: 'resize', height: 560 } }, '*');
+            });
+
+            rampButton.addEventListener('click', function () {
+                updateSelection(rampButton);
+                cornerRadiusGroup.style.display = 'none';
+                parent.postMessage({ pluginMessage: { type: 'resize', height: 650 } }, '*');
+            });
+
+            createLineButton.addEventListener('click', function () {
+                const lineType = curvedButton.classList.contains('selected') ? 'curved' : jaggedButton.classList.contains('selected') ? 'jagged' : 'ramp';
+                const strokeWidth = document.getElementById('pixelInput').value;
+                const lineLength = document.getElementById('lengthInput').value;
+                const cornerRadius = document.getElementById('cornerRadius').value;
+                const edgeFreq = document.getElementById('edgeFreq').value;
+                const rotationAngle = document.getElementById('angleInput').value;
+
+                parent.postMessage({
+                    pluginMessage: {
+                        type: 'createLine',
+                        lineType,
+                        strokeWidth,
+                        cornerRadius,
+                        edgeFreq,
+                        lineLength,
+                        rotationAngle
+                    }
+                }, '*');
+            });
+        });
+    </script>
 </body>
 
 </html>

@@ -42,7 +42,7 @@ function createLine(type, strokeWidth, cornerRadius, edgeFreq, lineLength, rotat
             const center = figma.viewport.center;
 
             // calculate helpers
-            const horWidth = (lineLength / (edgeFreq))*2;
+            const horWidth = (lineLength / (edgeFreq))* (type === 'ramp' ? 2 : 1);
             const verHeight = horWidth * Math.tan(Math.PI / 180 * rotationAngle); // convert degrees to radians
 
             const numberOfSegments = edgeFreq ;

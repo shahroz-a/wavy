@@ -214,8 +214,9 @@
             </div>
 
             <div class="input-group">
-                <label for="edgeFreq">Number of edges <span class="mandatory">*</span></label>
-                <input type="number" id="edgeFreq" placeholder="Optimal: 10">
+                <label for="unitFreq">Number of units <span class="mandatory">*</span></label>
+                <input type="number" id="unitFreq" placeholder="Optimal: 8">
+                <div class="subtext">square - number of wave units<br/> rest - number of edges</div>
             </div>
 
             <div class="input-group" id="cornerRadiusGroup">
@@ -224,10 +225,10 @@
                 <div class="subtext">For rounded edges</div>
             </div>
 
-            <div class="input-group">
-                <label for="angleInput">Rotation angle <span class="mandatory">*</span></label>
+            <div class="input-group" id="inclinationGroup">
+                <label for="angleInput">Inclination angle <span class="mandatory">*</span></label>
                 <input type="number" id="angleInput" placeholder="Optimal: 30(degrees)">
-                <div class="subtext">Base interior angle in degrees</div>
+                <div class="subtext">Interior angle in degrees</div>
             </div>
         </div>
 
@@ -240,40 +241,53 @@
             const curvedButton = document.getElementById('curved');
             const jaggedButton = document.getElementById('jagged');
             const rampButton = document.getElementById('ramp');
+            const squareButton = document.getElementById('square');
             const cornerRadiusGroup = document.getElementById('cornerRadiusGroup');
 
             function updateSelection(selectedButton) {
                 curvedButton.classList.remove('selected');
                 jaggedButton.classList.remove('selected');
                 rampButton.classList.remove('selected');
+                squareButton.classList.remove('selected');
                 selectedButton.classList.add('selected');
             }
 
             curvedButton.addEventListener('click', function () {
                 updateSelection(curvedButton);
                 cornerRadiusGroup.style.display = 'block';
+                inclinationGroup.style.display = 'block';
                 parent.postMessage({ pluginMessage: { type: 'resize', height: 650 } }, '*');
             });
 
             jaggedButton.addEventListener('click', function () {
                 updateSelection(jaggedButton);
                 cornerRadiusGroup.style.display = 'none';
-                parent.postMessage({ pluginMessage: { type: 'resize', height: 560 } }, '*');
+                inclinationGroup.style.display = 'block';
+                parent.postMessage({ pluginMessage: { type: 'resize', height: 640 } }, '*');
             });
 
             rampButton.addEventListener('click', function () {
                 updateSelection(rampButton);
                 cornerRadiusGroup.style.display = 'none';
-                parent.postMessage({ pluginMessage: { type: 'resize', height: 650 } }, '*');
+                inclinationGroup.style.display = 'block';
+                parent.postMessage({ pluginMessage: { type: 'resize', height: 640 } }, '*');
+            });
+
+            squareButton.addEventListener('click', function () {
+                updateSelection(squareButton);
+                cornerRadiusGroup.style.display = 'none';
+                inclinationGroup.style.display = 'none';
+                parent.postMessage({ pluginMessage: { type: 'resize', height: 550 } }, '*');
             });
 
             createLineButton.addEventListener('click', function () {
-                const lineType = curvedButton.classList.contains('selected') ? 'curved' : jaggedButton.classList.contains('selected') ? 'jagged' : 'ramp';
+                const lineType = curvedButton.classList.contains('selected') ? 'curved' : jaggedButton.classList.contains('selected') ? 'jagged' : squareButton.classList.contains('selected') ? 'square': 'ramp';
                 const strokeWidth = document.getElementById('pixelInput').value;
                 const lineLength = document.getElementById('lengthInput').value;
                 const cornerRadius = document.getElementById('cornerRadius').value;
-                const edgeFreq = document.getElementById('edgeFreq').value;
+                const unitFreq = document.getElementById('unitFreq').value;
                 const rotationAngle = document.getElementById('angleInput').value;
+                console.log(lineType, strokeWidth, cornerRadius, unitFreq, lineLength, rotationAngle);
 
                 parent.postMessage({
                     pluginMessage: {
@@ -281,7 +295,7 @@
                         lineType,
                         strokeWidth,
                         cornerRadius,
-                        edgeFreq,
+                        unitFreq,
                         lineLength,
                         rotationAngle
                     }

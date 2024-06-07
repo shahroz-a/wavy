@@ -11,7 +11,8 @@
   "ui": "ui.html",
   "networkAccess": {
     "allowedDomains": [
-      "https://cdn-imgix.headout.com/"
+      "https://cdn-imgix.headout.com/",
+      "https://fonts.googleapis.com"
     ]
   }
 }

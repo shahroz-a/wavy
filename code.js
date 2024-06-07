@@ -4,14 +4,14 @@ figma.ui.resize(300, 656);
 figma.ui.onmessage = (msg) => {
     console.log('Received message:', msg); // Debugging
     if (msg.type === "createLine") {
-        const { lineType, strokeWidth, cornerRadius, edgeFreq, lineLength, rotationAngle } = msg;
+        const { lineType, strokeWidth, cornerRadius, unitFreq, lineLength, rotationAngle } = msg;
 
         // Implement logic to create lines based on the selected type and custom properties
         const line = createLine(
             lineType,
             Number(strokeWidth),
             Number(cornerRadius),
-            Number(edgeFreq),
+            Number(unitFreq),
             Number(lineLength),
             Number(rotationAngle)
         );
@@ -34,15 +34,102 @@ function degrees_to_radians(degrees) {
     return degrees * (pi / 180);
 }
 
-function createLine(type, strokeWidth, cornerRadius, edgeFreq, lineLength, rotationAngle) {
-    
-    if (type === 'jagged' || type === 'curved' || type === 'ramp') {
+function createLine(type, strokeWidth, cornerRadius, unitFreq, lineLength, rotationAngle) {
+    if(type === 'square'){
         async function main() {
             // store center of viewport
             const center = figma.viewport.center;
 
             // calculate helpers
-            const horWidth = (lineLength / (edgeFreq))*2;
+            const horWidth = lineLength / (unitFreq);
+            const verHeight = horWidth;
+
+            let points = [];
+            let xOld = 0;
+            let xNew = 0;
+            points.push({ x: 0, y: 0 });
+            points.push({ x: 0, y: verHeight });
+            xOld = horWidth;
+            for (let i = 0; i <= unitFreq; i++) {
+                points.push({ x: xOld, y: i % 2 === 0 ? verHeight : 0 });
+                points.push({ x: xOld, y: i % 2 === 0 ? 0 : verHeight });
+                xNew = xOld +  horWidth;
+                xOld = xNew;
+            }
+
+            let segments = [];
+            for (let i = 0; i < unitFreq*2 + 1; i++) {
+                const currentSegment = { "start": i, "end": i + 1, "tangentStart": { "x": 0, "y": 0 }, "tangentEnd": { "x": 0, "y": 0 } };
+                segments.push(currentSegment);
+            }
+
+            let vertices = [];
+            for (let i = 0; i <= unitFreq*2 + 1; i++) {
+                const currentVertex = {
+                    "x": points[i].x,
+                    "y": -points[i].y,
+                    "strokeCap": "NONE",
+                    "strokeJoin": "MITER",
+                    "cornerRadius": cornerRadius,
+                    "handleMirroring": "NONE"
+                };
+                vertices.push(currentVertex);
+            }
+
+            let vectorData = "";
+            for (let i = 0; i < unitFreq*2 + 1; i++) {
+                if (i === 0) {
+                    vectorData = vectorData.concat(`M ${points[i].x.toString()} ${points[i].y.toString()} `);
+                } else {
+                    vectorData = vectorData.concat(`L ${points[i].x.toString()} ${points[i].y.toString()} `);
+                }
+            }
+
+            // Create VECTOR
+            var currentVector = figma.createVector();
+            figma.currentPage.appendChild(currentVector);
+            currentVector.name = 'square line'
+            currentVector.strokes = [
+                {
+                    "type": "SOLID",
+                    "visible": true,
+                    "opacity": 1,
+                    "blendMode": "NORMAL",
+                    "color": { "r": 0.258, "g": 0.812, "b": 0.443 },  
+                    "boundVariables": {}
+                }
+            ];
+            currentVector.strokeWeight = strokeWidth;
+            currentVector.relativeTransform = [[1, 0, center.x], [0, 1, center.y]];
+            currentVector.x = center.x;
+            currentVector.y = center.y;
+            currentVector.constrainProportions = true;
+            currentVector.vectorNetwork = {
+                "regions": [],
+                "segments": segments,
+                "vertices": vertices,
+            };
+            currentVector.vectorPaths = [
+                {
+                    "windingRule": "NONE",
+                    "data": vectorData,
+                }
+            ];
+
+            figma.viewport.scrollAndZoomIntoView([currentVector]);
+        }
+        main().then(() => {
+            figma.closePlugin();
+        });
+    }
+    else if (type === 'jagged' || type === 'curved' || type === 'ramp') {
+        async function main() {
+            const edgeFreq = unitFreq; // Number of edges
+            // store center of viewport
+            const center = figma.viewport.center;
+
+            // calculate helpers
+            const horWidth = (lineLength / (edgeFreq))* (type === 'ramp' ? 2 : 1);
             const verHeight = horWidth * Math.tan(Math.PI / 180 * rotationAngle); // convert degrees to radians
 
             const numberOfSegments = edgeFreq ;
@@ -51,11 +138,7 @@ function createLine(type, strokeWidth, cornerRadius, edgeFreq, lineLength, rotat
             let xOld = 0;
             let xNew = 0;
             for (let i = 0; i <= numberOfSegments; i++) {
-                if (type === 'ramp') {
-                    points.push({ x: xOld, y: i % 2 == 0 ? 0 : verHeight });
-                } else {
-                    points.push({ x: xOld, y: i % 2 == 0 ? 0 : verHeight });
-                }
+                points.push({ x: xOld, y: i % 2 == 0 ? 0 : verHeight });
                 xNew = xOld + (type == 'ramp' && i % 2 != 0  ? 0 : horWidth);
                 xOld = xNew;
             }

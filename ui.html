@@ -136,6 +136,13 @@
         .tabs {
             display: flex;
             justify-content: space-between;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .tabs .button-group{
+            display: flex;
+            justify-content: space-between;
         }
 
         .tabs button {
@@ -188,38 +195,40 @@
                         <button id="curved" class="selected">Curved<img src="https://cdn-imgix.headout.com/media/images/e90f8af709ae906902de8a9fccdcfc5d-curved.svg" alt=""></button>
                         <button id="jagged">Jagged<img src="https://cdn-imgix.headout.com/media/images/b4b535b8f994b55d898e5df34a2cd59f-jagged.svg" alt=""></button>
                     </div>
+
                     <div class="button-group">
-                        <button id="ramp">Ramp<img src="https://cdn-imgix.headout.com/media/images/b4b535b8f994b55d898e5df34a2cd59f-jagged.svg" alt=""></button>
-                        <button id="square">Square<img src="https://cdn-imgix.headout.com/media/images/b4b535b8f994b55d898e5df34a2cd59f-jagged.svg" alt=""></button>
+                        <button id="ramp">Ramp<img src="https://cdn-imgix.headout.com/media/images/9801fd71dc2cded350c1039e0f390153-ramp.svg" alt=""></button>
+                        <button id="square">Square<img src="https://cdn-imgix.headout.com/media/images/1f4e898ba34123706fd48b8aef187579-square.svg" alt=""></button>
                     </div>
                 </div>
             </div>
 
             <div class="input-group">
                 <label for="lengthInput">Line width <span class="mandatory">*</span></label>
-                <input type="number" id="lengthInput" placeholder="Min width: 100px">
+                <input type="number" id="lengthInput" placeholder="Min width: 100(px)">
             </div>
 
             <div class="input-group">
                 <label for="pixelInput">Stroke <span class="mandatory">*</span></label>
-                <input type="number" id="pixelInput" placeholder="Optimal: 2px">
+                <input type="number" id="pixelInput" placeholder="Optimal: 2(px)">
             </div>
 
             <div class="input-group">
-                <label for="edgeFreq">Number of edges <span class="mandatory">*</span></label>
-                <input type="number" id="edgeFreq" placeholder="Optimal: 10">
+                <label for="unitFreq">Number of units <span class="mandatory">*</span></label>
+                <input type="number" id="unitFreq" placeholder="Optimal: 8">
+                <div class="subtext">square - number of wave units<br/> rest - number of edges</div>
             </div>
 
             <div class="input-group" id="cornerRadiusGroup">
                 <label for="cornerRadius">Corner radius <span class="mandatory">*</span></label>
-                <input type="number" id="cornerRadius" placeholder="Optimal: 10px">
+                <input type="number" id="cornerRadius" placeholder="Optimal: 10(px)">
                 <div class="subtext">For rounded edges</div>
             </div>
 
-            <div class="input-group">
-                <label for="angleInput">Rotation angle <span class="mandatory">*</span></label>
-                <input type="number" id="angleInput" placeholder="Optimal: 30 degrees">
-                <div class="subtext">Base interior angle in degrees</div>
+            <div class="input-group" id="inclinationGroup">
+                <label for="angleInput">Inclination angle <span class="mandatory">*</span></label>
+                <input type="number" id="angleInput" placeholder="Optimal: 30(degrees)">
+                <div class="subtext">Interior angle in degrees</div>
             </div>
         </div>
 
@@ -232,40 +241,53 @@
             const curvedButton = document.getElementById('curved');
             const jaggedButton = document.getElementById('jagged');
             const rampButton = document.getElementById('ramp');
+            const squareButton = document.getElementById('square');
             const cornerRadiusGroup = document.getElementById('cornerRadiusGroup');
 
             function updateSelection(selectedButton) {
                 curvedButton.classList.remove('selected');
                 jaggedButton.classList.remove('selected');
                 rampButton.classList.remove('selected');
+                squareButton.classList.remove('selected');
                 selectedButton.classList.add('selected');
             }
 
             curvedButton.addEventListener('click', function () {
                 updateSelection(curvedButton);
                 cornerRadiusGroup.style.display = 'block';
+                inclinationGroup.style.display = 'block';
                 parent.postMessage({ pluginMessage: { type: 'resize', height: 650 } }, '*');
             });
 
             jaggedButton.addEventListener('click', function () {
                 updateSelection(jaggedButton);
                 cornerRadiusGroup.style.display = 'none';
-                parent.postMessage({ pluginMessage: { type: 'resize', height: 560 } }, '*');
+                inclinationGroup.style.display = 'block';
+                parent.postMessage({ pluginMessage: { type: 'resize', height: 640 } }, '*');
             });
 
             rampButton.addEventListener('click', function () {
                 updateSelection(rampButton);
                 cornerRadiusGroup.style.display = 'none';
-                parent.postMessage({ pluginMessage: { type: 'resize', height: 650 } }, '*');
+                inclinationGroup.style.display = 'block';
+                parent.postMessage({ pluginMessage: { type: 'resize', height: 640 } }, '*');
+            });
+
+            squareButton.addEventListener('click', function () {
+                updateSelection(squareButton);
+                cornerRadiusGroup.style.display = 'none';
+                inclinationGroup.style.display = 'none';
+                parent.postMessage({ pluginMessage: { type: 'resize', height: 550 } }, '*');
             });
 
             createLineButton.addEventListener('click', function () {
-                const lineType = curvedButton.classList.contains('selected') ? 'curved' : jaggedButton.classList.contains('selected') ? 'jagged' : 'ramp';
+                const lineType = curvedButton.classList.contains('selected') ? 'curved' : jaggedButton.classList.contains('selected') ? 'jagged' : squareButton.classList.contains('selected') ? 'square': 'ramp';
                 const strokeWidth = document.getElementById('pixelInput').value;
                 const lineLength = document.getElementById('lengthInput').value;
                 const cornerRadius = document.getElementById('cornerRadius').value;
-                const edgeFreq = document.getElementById('edgeFreq').value;
+                const unitFreq = document.getElementById('unitFreq').value;
                 const rotationAngle = document.getElementById('angleInput').value;
+                console.log(lineType, strokeWidth, cornerRadius, unitFreq, lineLength, rotationAngle);
 
                 parent.postMessage({
                     pluginMessage: {
@@ -273,7 +295,7 @@
                         lineType,
                         strokeWidth,
                         cornerRadius,
-                        edgeFreq,
+                        unitFreq,
                         lineLength,
                         rotationAngle
                     }
